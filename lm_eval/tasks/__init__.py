@@ -60,6 +60,8 @@ from . import xwinograd
 from . import pawsx
 from . import xnli
 from . import mgsm
+from . import fiqa_sa
+from . import financial_phrasebank
 
 ########################################
 # Translation tasks
@@ -314,6 +316,12 @@ TASK_REGISTRY = {
     "crows_pairs_french_nationality": crowspairs.CrowsPairsFrenchNationality,
     "crows_pairs_french_physical_appearance": crowspairs.CrowsPairsFrenchPhysicalAppearance,
     "crows_pairs_french_autre": crowspairs.CrowsPairsFrenchAutre,
+    # FINANCE
+    "fiqa_sa": fiqa_sa.FIQASentimentAnalysis,
+    "financial_phrasebank_50agree": financial_phrasebank.FinancialPhrasebank50,
+    "financial_phrasebank_66agree": financial_phrasebank.FinancialPhrasebank66,
+    "financial_phrasebank_75agree": financial_phrasebank.FinancialPhrasebank75,
+    "financial_phrasebank_allagree": financial_phrasebank.FinancialPhrasebankAll,
     # Requires manual download of data.
     # "storycloze_2016": storycloze.StoryCloze2016,
     # "storycloze_2018": storycloze.StoryCloze2018,
