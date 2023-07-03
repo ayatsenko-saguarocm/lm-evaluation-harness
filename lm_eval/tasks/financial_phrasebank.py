@@ -29,6 +29,7 @@ _CITATION = """
 class FinancialPhrasebank(Task):
     VERSION = 0
     DATASET_PATH = "financial_phrasebank"
+    DATASET_NAME = "sentences_50agree"
 
     def has_training_docs(self):
         return True
@@ -37,19 +38,25 @@ class FinancialPhrasebank(Task):
         return False
 
     def has_test_docs(self):
-        return False
+        return True
 
     def training_docs(self):
         if self.has_training_docs():
+            print("\n\n\n\\n\n\n\n\n\n\n\\n\n\n\\n\n")
+            if self._training_docs is None:
+                self._training_docs = list(self.dataset["train"])
+            return self._training_docs
+
+    def test_docs(self):
+        if self.has_training_docs():
+            print("\n\n\n\\n\n\n\n\n\n\n\\n\n\n\\n\n")
             if self._training_docs is None:
                 self._training_docs = list(self.dataset["train"])
             return self._training_docs
 
     def validation_docs(self):
-        return NotImplemented
-
-    def test_docs(self):
-        return NotImplemented
+        if self.has_validation_docs():
+            return self.dataset["validation"]
 
     def doc_to_text(self, doc):
         return doc["sentence"]
@@ -60,12 +67,25 @@ class FinancialPhrasebank(Task):
         return " " + target
 
     def construct_requests(self, doc, ctx):
-        ll, is_prediction = rf.loglikelihood(ctx, doc["completion"])
-        return is_prediction
+        ll_positive, _ = rf.loglikelihood(ctx, " positive")
+        ll_neutral, _ = rf.loglikelihood(ctx, " neutral")
+        ll_negative, _ = rf.loglikelihood(ctx, " negative")
+
+        return ll_positive, ll_neutral, ll_negative
 
     def process_results(self, doc, results):
-        (is_prediction,) = results
-        return {"acc": is_prediction}
+        ll_positive, ll_neutral, ll_negative = results
+
+        if ll_positive > ll_neutral and ll_positive > ll_negative:
+            pred = " positive"
+        elif ll_negative > ll_neutral and ll_negative > ll_positive:
+            pred = " negative"
+        elif ll_neutral > ll_positive and ll_neutral > ll_negative:
+            pred = " neutral"
+
+        target = self.doc_to_target(doc)
+
+        return {"acc": pred == target}
 
     def aggregation(self):
         return {"acc": mean}

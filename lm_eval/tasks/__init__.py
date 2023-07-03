@@ -318,6 +318,7 @@ TASK_REGISTRY = {
     "crows_pairs_french_autre": crowspairs.CrowsPairsFrenchAutre,
     # FINANCE
     "fiqa_sa": fiqa_sa.FIQASentimentAnalysis,
+    "financial_phrasebank": financial_phrasebank.FinancialPhrasebank,
     "financial_phrasebank_50agree": financial_phrasebank.FinancialPhrasebank50,
     "financial_phrasebank_66agree": financial_phrasebank.FinancialPhrasebank66,
     "financial_phrasebank_75agree": financial_phrasebank.FinancialPhrasebank75,
